@@ -8,10 +8,8 @@ This project compares different deep learning models for detecting traffic anoma
 1. [Project Overview & Pipeline](#-project-overview--pipeline)
 2. [Model Architectures](#-model-architectures)
 3. [Model Comparison & Evaluation](#-model-comparison--evaluation)
-4. [Key Engineering Fixes](#-key-engineering-fixes)
-5. [Streamlit Interactive Dashboard](#-streamlit-interactive-dashboard)
-6. [Traffic Anomaly Taxonomy (Event Legend)](#-traffic-anomaly-taxonomy-event-legend)
-7. [Getting Started & Installation](#-getting-started--installation)
+4. [Streamlit Interactive Dashboard](#-streamlit-interactive-dashboard)
+5. [Getting Started & Installation](#-getting-started--installation)
 
 ---
 
@@ -78,15 +76,6 @@ Below are the visualization curves generated during the experiment:
 
 ---
 
-## 🛠️ Key Engineering Fixes
-
-Several critical updates were made to correct bugs from earlier iterations of the pipeline:
-1. **Proper Label Alignment**: Previously, test features and labels were misaligned because the shard loading order during feature extraction (alphabetical/sorted) did not match the file-reading sequence. Sorting folders and filenames explicitly before matching timestamps resolved this.
-2. **MAX-Scoring Sensitivity**: Switching the sequence anomaly score from the `mean` to the `max` frame error within the window dramatically improved the detection of short-lived anomalies (such as sudden braking, quick lane cuts, or swerves), which otherwise got averaged out.
-3. **Consistent Device Support**: Configured seamless fallback between Apple Silicon (`mps`), CUDA (`cuda`), and CPU (`cpu`) environments.
-
----
-
 ## 🖥️ Streamlit Interactive Dashboard
 
 An interactive UI dashboard is included in [`streamlit_app.py`](streamlit_app.py) to inspect the model's performance on the test dataset.
@@ -106,45 +95,6 @@ An interactive UI dashboard is included in [`streamlit_app.py`](streamlit_app.py
 * **Sequence Frame Progression & Event Indexing**:
   
   ![Streamlit Frame Inspector](ui/Screenshot%202026-03-06%20at%206.56.38%E2%80%AFAM.png)
-
----
-
-## 📋 Traffic Anomaly Taxonomy (Event Legend)
-
-The models detect 32 distinct traffic anomalies. Below is the legend mapping the indices:
-
-* **1** - Change of lane
-* **2** - Late turn (almost missing a curve)
-* **3** - Cutting inside turns (crossing the centerline for a shorter path)
-* **4** - Driving on centerline (between lanes going in the same direction)
-* **5** - Moving out of the way for emergency vehicles
-* **6** - Short wait at intersection when the road is free
-* **7** - Long wait at empty intersection
-* **8** - Waiting too far into the main road at intersection
-* **9** - Random stopping/waiting at unusual points (e.g., middle of the road)
-* **10** - Random slowing down at unusual points
-* **11** - Fast reckless driving
-* **12** - Slow insecure driving
-* **13** - Weird movement (e.g., weaving, moving in circles)
-* **14** - Moving backwards (reversing)
-* **15** - Approaching waiting/slow cars unusually close
-* **16** - Traffic tie-up
-* **17** - Almost cutting off another vehicle
-* **18** - Strong/abrupt cut-off of another vehicle
-* **19** - Almost collision
-* **20** - Driving into the oncoming lane while turning
-* **21** - Illegal turns
-* **22** - Short wrong-way driving (e.g., wrong direction in roundabout, leaving quickly)
-* **23** - Wrong-way driver (major wrong direction driving)
-* **24** - Multiple turns in roundabout
-* **25** - Broken down vehicle on the street
-* **26** - Stopping in the middle of the street to let someone cross
-* **27** - Stopping at pedestrian crossing to let someone cross
-* **28** - Slightly getting off the road while driving
-* **29** - Driving on/parking on sidewalk
-* **30** - Strong sudden braking
-* **31** - Swerve to avoid another vehicle
-* **32** - Extreme risky driving (combinations of multiple categories or high-speed maneuvers)
 
 ---
 
